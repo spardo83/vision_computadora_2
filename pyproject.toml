@@ -1,0 +1,48 @@
+[project]
+name = "computer-vision-2-tp"
+version = "0.1.0"
+description = "Sistema de Monitoreo Automático de EPP en Obras de Construcción"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "Sebastian Pardo", email = "spardo83@gmail.com" }
+]
+
+dependencies = [
+    "ultralytics>=8.3.0",
+    "roboflow>=1.1.41",
+    "jupyter>=1.0.0",
+    "ipykernel>=6.29.0",
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+    "pandas>=2.1.0",
+    "numpy>=1.26.0",
+    "opencv-python>=4.9.0",
+    "pillow>=10.2.0",
+    "tqdm>=4.66.0",
+    "pyyaml>=6.0.1",
+    "scikit-learn>=1.4.0",
+    "ipywidgets>=8.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.3.0",
+    "black>=24.0.0",
+]
+
+[tool.uv]
+# Para instalar PyTorch CPU-only (más liviano sin CUDA)
+# Correr: uv pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+# O con CUDA: uv pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ppe_monitor"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
