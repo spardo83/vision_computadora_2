@@ -4,6 +4,7 @@
 **Autores:**
 - Sebastian Pardo (spardo83@gmail.com)
 - Maira Daniela Ferrari (mferrari@gmail.com)
+- Maria Gabriela Bohórquez (gabriellabohorquez@gmail.com)
 
 ---
 
