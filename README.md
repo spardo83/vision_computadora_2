@@ -1,7 +1,9 @@
 # Sistema de Monitoreo Automático de EPP en Obras de Construcción
 
 **Trabajo Práctico – Visión por Computadora II**
-**Autor:** Sebastian Pardo (spardo83@gmail.com)
+**Autores:**
+- Sebastian Pardo (spardo83@gmail.com)
+- Maira Daniela Ferrari (mferrari@gmail.com)
 
 ---
 
