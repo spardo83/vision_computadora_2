@@ -1,0 +1,16 @@
+{
+  "dataset_yaml": "../data/construction-ppe/data.yaml",
+  "num_classes": 10,
+  "class_names": [
+    "Hardhat",
+    "Mask",
+    "NO-Hardhat",
+    "NO-Mask",
+    "NO-Safety Vest",
+    "Person",
+    "Safety Cone",
+    "Safety Vest",
+    "machinery",
+    "vehicle"
+  ]
+}

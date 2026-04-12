@@ -29,10 +29,12 @@ data/test/
 
 # Modelos entrenados pesados
 models/*.pt
+notebooks/*.pt
 runs/
 
-# Videos de demo (pesados)
-videos/*.mp4
+# Videos de output (se generan corriendo notebook 04)
+videos/output_*.mp4
+videos/demo_presentacion.mp4
 videos/*.avi
 videos/*.mov
 
@@ -45,15 +47,23 @@ roboflow_key.txt
 .DS_Store
 Thumbs.db
 
-# VS Code
+# IDEs
 .vscode/
 *.code-workspace
+.idea/
 
 # uv
 .uv/
 
 # Claude / Cowork (conversaciones y configuración local)
 .claude/
+
+# LaTeX auxiliares
+*.aux
+*.out
+*.bbl
+*.blg
+missfont.log
 
 # Outputs temporales
 *.log
