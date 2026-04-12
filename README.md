@@ -1,7 +1,7 @@
 # Sistema de Monitoreo Automático de EPP en Obras de Construcción
 
 **Trabajo Práctico – Visión por Computadora II**
-**Autor:** Sebastian Pardo (spardo83@gmail.com)
+**Autores:** Pardo, Sebastián. Ferrari, Maira Daniela
 
 ---
 
@@ -109,11 +109,9 @@ En el Notebook 1, reemplazar `"TU_API_KEY_AQUI"` con la key obtenida.
 
 | Modelo | mAP50 | mAP50-95 | Precision | Recall | Latencia (CPU) |
 |--------|-------|----------|-----------|--------|----------------|
-| YOLOv8n | — | — | — | — | — |
-| YOLOv8m | — | — | — | — | — |
-| YOLOv11n | — | — | — | — | — |
-
-*Tabla a completar tras ejecutar el entrenamiento.*
+| YOLOv8n | 0.777 | 0.476 | 0.896 | 0.685 | 8.3ms (120 FPS) |
+| YOLOv8m | **0.858** | **0.580** | **0.936** | **0.787** | 10.3ms (97 FPS) |
+| YOLOv11n | 0.769 | 0.461 | 0.888 | 0.698 | 10.3ms (97 FPS) |
 
 ## Notebooks
 
