@@ -1,7 +1,7 @@
 # Sistema de Monitoreo Automático de EPP en Obras de Construcción
 
 **Trabajo Práctico – Visión por Computadora II**
-**Autores:** Pardo, Sebastián. Ferrari, Maira Daniela
+**Autores:** Pardo, Sebastian. Ferrari, Maira Daniela
 
 ---
 
