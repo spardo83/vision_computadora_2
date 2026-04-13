@@ -1,0 +1,72 @@
+{
+  "obra_vista_general": {
+    "frames_procesados": 607,
+    "tracks_unicos": 49,
+    "tracks_efimeros_descartados": 25,
+    "total_alertas": 78,
+    "tasa_cumplimiento": 0.631,
+    "video_salida": "../videos/output_obra_vista_general.mp4",
+    "nombre": "Obra en construccion - vista general",
+    "fuente": "Pexels #13921040",
+    "epp_requerido": [
+      "Safety Vest",
+      "Hardhat"
+    ]
+  },
+  "trabajadores_maquinaria": {
+    "frames_procesados": 456,
+    "tracks_unicos": 10,
+    "tracks_efimeros_descartados": 13,
+    "total_alertas": 8,
+    "tasa_cumplimiento": 0.4235,
+    "video_salida": "../videos/output_trabajadores_maquinaria.mp4",
+    "nombre": "Trabajadores con maquinaria",
+    "fuente": "Pexels #9227135",
+    "epp_requerido": [
+      "Safety Vest",
+      "Hardhat"
+    ]
+  },
+  "construccion_aire_libre": {
+    "frames_procesados": 447,
+    "tracks_unicos": 10,
+    "tracks_efimeros_descartados": 0,
+    "total_alertas": 8,
+    "tasa_cumplimiento": 0.5361,
+    "video_salida": "../videos/output_construccion_aire_libre.mp4",
+    "nombre": "Construccion al aire libre",
+    "fuente": "Pexels #2048246",
+    "epp_requerido": [
+      "Safety Vest",
+      "Hardhat"
+    ]
+  },
+  "colaboracion_obra": {
+    "frames_procesados": 235,
+    "tracks_unicos": 8,
+    "tracks_efimeros_descartados": 0,
+    "total_alertas": 8,
+    "tasa_cumplimiento": 0.7447,
+    "video_salida": "../videos/output_colaboracion_obra.mp4",
+    "nombre": "Colaboracion en obra",
+    "fuente": "Pexels #30331740",
+    "epp_requerido": [
+      "Safety Vest",
+      "Hardhat"
+    ]
+  },
+  "trabajadores_epp_completo": {
+    "frames_procesados": 201,
+    "tracks_unicos": 5,
+    "tracks_efimeros_descartados": 0,
+    "total_alertas": 3,
+    "tasa_cumplimiento": 1.0,
+    "video_salida": "../videos/output_trabajadores_epp_completo.mp4",
+    "nombre": "Trabajadores con EPP completo",
+    "fuente": "Pexels #8964930",
+    "epp_requerido": [
+      "Safety Vest",
+      "Hardhat"
+    ]
+  }
+}
