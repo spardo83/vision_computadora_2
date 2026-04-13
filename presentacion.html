@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Monitoreo de EPP – VC2 CEIA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <style>
+    :root {
+      --bg:         #f0f4f8;
+      --bg-card:    #ffffff;
+      --bg-accent:  #eff6ff;
+      --bg-section: linear-gradient(135deg, #1e3a5f 0%, #1e40af 100%);
+      --primary:    #1d4ed8;
+      --primary-lt: #3b82f6;
+      --cyan:       #0891b2;
+      --green:      #16a34a;
+      --green-bg:   #f0fdf4;
+      --red:        #dc2626;
+      --red-bg:     #fef2f2;
+      --yellow:     #d97706;
+      --yellow-bg:  #fffbeb;
+      --text:       #0f172a;
+      --text-2:     #334155;
+      --text-muted: #64748b;
+      --border:     #e2e8f0;
+      --shadow:     0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.06);
+      --shadow-lg:  0 4px 6px rgba(0,0,0,0.05), 0 10px 30px rgba(0,0,0,0.1);
+    }
+    .reveal-viewport { background: var(--bg); }
+    .reveal { font-family: 'Inter', sans-serif; color: var(--text); }
+    .reveal h1,.reveal h2,.reveal h3 { font-family:'Inter',sans-serif; text-transform:none; letter-spacing:-0.02em; color:var(--text); }
+    .reveal .slides section { height:100%; box-sizing:border-box; }
+    .reveal .progress { color: var(--primary); }
+    .reveal .controls { color: var(--primary); }
+    .reveal .slide-number { background:var(--bg-card); color:var(--text-muted); font-family:'JetBrains Mono',monospace; font-size:0.65rem; border:1px solid var(--border); }
+
+    /* BASE */
+    .base { display:flex; flex-direction:column; justify-content:center; height:100%; padding:2rem 3rem; box-sizing:border-box; }
+
+    /* ── TITLE SLIDE ── */
+    .slide-title {
+      background: linear-gradient(160deg, #1e3a5f 0%, #1e40af 55%, #0891b2 100%);
+      text-align: center; align-items: center;
+    }
+    .slide-title .badge {
+      display:inline-block; font-size:0.62rem; font-weight:700; letter-spacing:0.16em;
+      text-transform:uppercase; color:#93c5fd; border:1px solid rgba(147,197,253,0.4);
+      padding:0.3em 1em; border-radius:100px; margin-bottom:1.4rem;
+    }
+    .slide-title h1 {
+      font-size:2.5rem; font-weight:800; line-height:1.15; color:#fff;
+      margin:0 0 0.8rem; max-width:860px; text-shadow:0 2px 20px rgba(0,0,0,0.3);
+    }
+    .slide-title .sub { font-size:0.9rem; color:#bfdbfe; margin-bottom:2.5rem; }
+    .authors-row { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:2rem; }
+    .author-chip {
+      background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25);
+      backdrop-filter:blur(8px); border-radius:12px; padding:0.55rem 1.1rem;
+      font-size:0.8rem; font-weight:600; color:#fff;
+    }
+    .slide-title .meta { font-size:0.72rem; color:#93c5fd; }
+
+    /* ── SECTION DIVIDER ── */
+    .slide-section {
+      background: var(--bg-section); text-align:center; align-items:center;
+    }
+    .slide-section .snum {
+      font-size:4.5rem; font-weight:900; line-height:1; color:rgba(255,255,255,0.15); margin-bottom:0.5rem;
+    }
+    .slide-section h2 { font-size:2rem; font-weight:800; color:#fff; margin:0; }
+    .slide-section p { color:#bfdbfe; font-size:0.9rem; margin-top:0.6rem; }
+
+    /* ── STANDARD SLIDE ── */
+    .slide-std { background: var(--bg); }
+    .shead { display:flex; align-items:center; gap:0.7rem; margin-bottom:1.5rem; }
+    .stag {
+      font-size:0.6rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase;
+      color:var(--primary); background:var(--bg-accent); border:1px solid #bfdbfe;
+      padding:0.25em 0.75em; border-radius:100px;
+    }
+    .shead h2 { font-size:1.55rem; font-weight:800; margin:0; }
+
+    /* ── CARD ── */
+    .card {
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:14px; padding:1.2rem 1.4rem; box-shadow:var(--shadow);
+    }
+    .g2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.8rem; }
+    .g4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:0.75rem; }
+
+    /* ── STAT CARDS ── */
+    .stat { background:var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:1.1rem; text-align:center; box-shadow:var(--shadow); }
+    .stat .v { font-size:2rem; font-weight:800; line-height:1; margin-bottom:0.3rem; }
+    .stat .l { font-size:0.68rem; color:var(--text-muted); font-weight:500; }
+    .blue .v { color:var(--primary); }
+    .cyan .v  { color:var(--cyan); }
+    .green .v { color:var(--green); }
+    .yellow .v{ color:var(--yellow); }
+
+    /* ── PIPELINE ── */
+    .pipeline { display:flex; align-items:center; gap:0; width:100%; margin-bottom:1.2rem; }
+    .pstep {
+      flex:1; background:var(--bg-card); border:1px solid var(--border);
+      border-radius:12px; padding:1rem 0.7rem; text-align:center; box-shadow:var(--shadow);
+    }
+    .pstep .icon { font-size:1.6rem; margin-bottom:0.35rem; }
+    .pstep .pname { font-size:0.72rem; font-weight:800; color:var(--primary); margin-bottom:0.2rem; letter-spacing:0.04em; }
+    .pstep .psub { font-size:0.62rem; color:var(--text-muted); line-height:1.4; }
+    .parr { font-size:1rem; color:var(--primary); opacity:0.5; margin:0 0.3rem; flex-shrink:0; }
+    .pstep.hl-blue  { border-color:#bfdbfe; background:#eff6ff; }
+    .pstep.hl-cyan  { border-color:#a5f3fc; background:#ecfeff; }
+    .pstep.hl-green { border-color:#bbf7d0; background:#f0fdf4; }
+    .pstep.hl-red   { border-color:#fecaca; background:#fef2f2; }
+
+    /* ── TABLE ── */
+    .mtable { width:100%; border-collapse:collapse; font-size:0.8rem; }
+    .mtable thead th {
+      text-align:left; padding:0.65rem 0.9rem; color:var(--text-muted); font-weight:700;
+      font-size:0.65rem; text-transform:uppercase; letter-spacing:0.08em;
+      border-bottom:2px solid var(--border); background:var(--bg);
+    }
+    .mtable thead th:not(:first-child) { text-align:center; }
+    .mtable tbody tr { border-bottom:1px solid var(--border); }
+    .mtable tbody tr:last-child { border-bottom:none; }
+    .mtable tbody td { padding:0.8rem 0.9rem; text-align:center; font-weight:500; color:var(--text-2); }
+    .mtable tbody td:first-child { text-align:left; }
+    .mtable .best-row { background:#f0fdf4; }
+    .mtable .bv { color:var(--green); font-weight:800; }
+    .chip { display:inline-flex; align-items:center; padding:0.2em 0.6em; border-radius:6px; font-size:0.72rem; font-weight:700; font-family:'JetBrains Mono',monospace; }
+    .chip-n  { background:#eff6ff; color:#1d4ed8; }
+    .chip-m  { background:#f0fdf4; color:#15803d; }
+    .chip-11 { background:#fffbeb; color:#92400e; }
+
+    /* ── THREE STATES ── */
+    .sc { border-radius:12px; padding:1rem 1.1rem; border:1.5px solid; }
+    .sc .sb { font-size:0.62rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.4rem; }
+    .sc .st { font-size:0.88rem; font-weight:700; margin-bottom:0.25rem; color:var(--text); }
+    .sc .sd { font-size:0.7rem; color:var(--text-muted); line-height:1.5; }
+    .sg  { background:var(--green-bg); border-color:#86efac; }
+    .sg .sb { color:var(--green); }
+    .sr  { background:var(--red-bg); border-color:#fca5a5; }
+    .sr .sb { color:var(--red); }
+    .sgy { background:#f8fafc; border-color:#cbd5e1; }
+    .sgy .sb { color:var(--text-muted); }
+
+    /* ── CLASS PILLS ── */
+    .pill { display:inline-block; font-size:0.67rem; font-weight:600; padding:0.28em 0.7em; border-radius:100px; margin:0.2rem; }
+    .pp  { background:#dcfce7; color:#15803d; border:1px solid #bbf7d0; }
+    .pno { background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; }
+    .pot { background:#f1f5f9; color:#475569; border:1px solid #e2e8f0; }
+
+    /* ── VIDEO BAR ── */
+    .vrow { display:grid; grid-template-columns:2fr 0.6fr 0.6fr 0.6fr 1.1fr; align-items:center; padding:0.65rem 1rem; border-bottom:1px solid var(--border); font-size:0.76rem; }
+    .vrow:last-child { border-bottom:none; }
+    .vrow .vn { font-weight:600; color:var(--text); }
+    .vrow .vv { text-align:center; color:var(--text-muted); }
+    .cbar { height:7px; border-radius:100px; background:var(--border); overflow:hidden; margin-top:3px; }
+    .cfill { height:100%; border-radius:100px; }
+    .clabel { font-size:0.72rem; font-weight:700; }
+
+    /* ── CONCLUSIONS ── */
+    .citem { display:flex; gap:0.9rem; align-items:flex-start; padding:0.75rem 0.9rem; border-radius:10px; margin-bottom:0.35rem; border:1px solid transparent; }
+    .citem:hover { background:var(--bg-card); border-color:var(--border); }
+    .cnum { font-size:1rem; font-weight:800; color:var(--primary); min-width:1.4rem; line-height:1.5; }
+    .ctxt { font-size:0.78rem; line-height:1.65; color:var(--text-2); }
+    .ctxt strong { color:var(--text); }
+
+    /* ── IMG SLIDES ── */
+    .img-grid { display:grid; gap:0.8rem; }
+    .img-grid img {
+      width:100%; object-fit:contain; border-radius:10px;
+      border:1px solid var(--border); box-shadow:var(--shadow); background:white;
+    }
+    .img-caption { font-size:0.65rem; color:var(--text-muted); text-align:center; margin-top:0.3rem; }
+
+    /* ── DEMO SLIDE ── */
+    .slide-demo { background:linear-gradient(160deg,#0f172a 0%,#1e1b4b 100%); }
+    .slide-demo .shead h2 { color:#fff; }
+    .slide-demo .stag { color:#a5b4fc; background:rgba(165,180,252,0.1); border-color:rgba(165,180,252,0.3); }
+    .demo-hero {
+      border-radius:16px; overflow:hidden; border:2px solid rgba(99,102,241,0.4);
+      box-shadow:0 0 40px rgba(99,102,241,0.25); position:relative;
+      max-height:370px;
+    }
+    .demo-hero img { width:100%; max-height:370px; object-fit:cover; display:block; }
+    .demo-play {
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      background:rgba(255,255,255,0.12); backdrop-filter:blur(12px);
+      border:2px solid rgba(255,255,255,0.3); border-radius:50%;
+      width:64px; height:64px; display:flex; align-items:center; justify-content:center;
+      font-size:1.5rem; cursor:pointer;
+    }
+    .demo-meta {
+      display:flex; gap:1rem; margin-top:0.8rem;
+    }
+    .demo-badge {
+      background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15);
+      border-radius:8px; padding:0.4rem 0.8rem; font-size:0.72rem; color:#e2e8f0;
+      font-weight:500;
+    }
+    .demo-badge span { color:#a5b4fc; font-weight:700; }
+
+    /* ── FINAL SLIDE ── */
+    .slide-final {
+      background:linear-gradient(160deg, #1e3a5f 0%, #1e40af 100%);
+      text-align:center; align-items:center;
+    }
+    .slide-final h2 { font-size:2.6rem; font-weight:800; color:#fff; margin-bottom:0.5rem; }
+    .slide-final p { color:#bfdbfe; font-size:0.9rem; margin-bottom:1.8rem; }
+    .final-cards { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+    .fcard {
+      background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
+      border-radius:14px; padding:1rem 1.4rem; text-align:center; min-width:140px;
+    }
+    .fcard .fv { font-size:1.3rem; font-weight:800; color:#fff; }
+    .fcard .fl { font-size:0.68rem; color:#93c5fd; margin-top:0.2rem; }
+
+    /* AGENDA */
+    .aitem { display:flex; align-items:center; gap:0.9rem; padding:0.6rem 0.8rem; border-radius:10px; }
+    .anum { font-size:0.68rem; font-weight:700; width:1.7rem; height:1.7rem; background:var(--bg-accent); color:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; border:1px solid #bfdbfe; }
+    .albl { font-size:0.83rem; font-weight:500; }
+    .atime { margin-left:auto; font-size:0.68rem; color:var(--text-muted); font-family:'JetBrains Mono',monospace; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ══ SLIDE 1: PORTADA ══ -->
+<section>
+<div class="base slide-title">
+  <div class="badge">Visión por Computadora II · CEIA · UBA · 2026</div>
+  <h1>Sistema de Monitoreo Automático de EPP en Obras de Construcción</h1>
+  <p class="sub">Detección de objetos · Seguimiento multi-objeto · Motor de compliance</p>
+  <div class="authors-row">
+    <div class="author-chip">Bohórquez, María Gabriela</div>
+    <div class="author-chip">Ferrari, Maira Daniela</div>
+    <div class="author-chip">Pardo, Sebastián</div>
+  </div>
+  <p class="meta">Visión por Computadora II · 20 de abril, 2026</p>
+</div>
+</section>
+
+<!-- ══ SLIDE 2: AGENDA ══ -->
+<section>
+<div class="base slide-std">
+  <div class="shead"><span class="stag">Agenda</span><h2>Estructura de la Exposición</h2></div>
+  <div class="card" style="display:flex;flex-direction:column;gap:0.15rem;">
+    <div class="aitem"><div class="anum">1</div><div class="albl">🏗️ El Problema — Por qué automatizar la supervisión de EPP</div><div class="atime">~1 min</div></div>
+    <div class="aitem"><div class="anum">2</div><div class="albl">📦 Dataset — Construction Site Safety (Roboflow, 10 clases)</div><div class="atime">~1 min</div></div>
+    <div class="aitem"><div class="anum">3</div><div class="albl">⚙️ Arquitectura — YOLO + ByteTrack + Motor de Compliance</div><div class="atime">~2 min</div></div>
+    <div class="aitem"><div class="anum">4</div><div class="albl">📊 Resultados — Comparación YOLOv8n / v8m / v11n</div><div class="atime">~2 min</div></div>
+    <div class="aitem"><div class="anum">5</div><div class="albl">🎬 Demo — Sistema en acción sobre obras reales</div><div class="atime">~2 min</div></div>
+    <div class="aitem"><div class="anum">6</div><div class="albl">✅ Conclusiones</div><div class="atime">~1 min</div></div>
+  </div>
+</div>
+</section>
+
+<!-- ══ SLIDE 3: EL PROBLEMA ══ -->
+<section>
+<div class="base slide-std">
+  <div class="shead"><span class="stag">Motivación</span><h2>El Problema</h2></div>
+  <div class="g2" style="align-items:start;gap:1.2rem;">
+    <div style="display:flex;flex-direction:column;gap:0.8rem;">
+      <p style="font-size:0.83rem;line-height:1.75;color:var(--text-2);margin:0;">
+        La industria de la construcción tiene una de las tasas más altas de accidentes laborales del mundo. El incumplimiento del uso de EPP es uno de los principales factores de riesgo.
+      </p>
+      <p style="font-size:0.83rem;line-height:1.75;color:var(--text-2);margin:0;">
+        La supervisión tradicional es <strong style="color:var(--red);">costosa, intermitente y propensa a errores humanos</strong>. No puede cubrir todos los turnos y zonas simultáneamente.
+      </p>
+      <div class="card" style="border-color:#fca5a5;background:var(--red-bg);">
+        <div style="font-size:0.65rem;color:var(--red);font-weight:700;margin-bottom:0.3rem;">● OIT 2023</div>
+        <div style="font-size:0.82rem;color:var(--text);">El <strong>30% de los accidentes fatales</strong> del trabajo ocurren en la construcción.</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:0.8rem;">
+      <div class="stat blue"><div class="v">3</div><div class="l">EPP monitoreados<br>Casco · Chaleco · Mascarilla</div></div>
+      <div class="stat green"><div class="v">97+</div><div class="l">FPS en CPU<br>Monitoreo en tiempo real</div></div>
+      <div class="stat cyan"><div class="v">24/7</div><div class="l">Sin fatiga de supervisores<br>Monitoreo continuo</div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ SLIDE 4: DATASET ══ -->
+<section>
+<div class="base slide-std">
+  <div class="shead"><span class="stag">Datos</span><h2>Dataset: Construction Site Safety</h2></div>
+  <div class="g2" style="align-items:start;gap:1.2rem;">
+    <div style="display:flex;flex-direction:column;gap:0.8rem;">
+      <div class="g3" style="gap:0.6rem;">
+        <div class="stat blue" style="padding:0.8rem;"><div class="v" style="font-size:1.5rem;">10</div><div class="l">clases</div></div>
+        <div class="stat cyan" style="padding:0.8rem;"><div class="v" style="font-size:1.5rem;">~9K</div><div class="l">imágenes</div></div>
+        <div class="stat green" style="padding:0.8rem;"><div class="v" style="font-size:1.5rem;">11</div><div class="l">obj/img</div></div>
+      </div>
+      <div style="font-size:0.67rem;color:var(--text-muted);font-weight:700;margin-bottom:0.3rem;">CLASES ANOTADAS</div>
+      <div>
+        <div style="font-size:0.62rem;color:var(--green);font-weight:700;margin-bottom:0.3rem;">EPP PRESENTE</div>
+        <span class="pill pp">🪖 Hardhat</span><span class="pill pp">😷 Mask</span><span class="pill pp">🦺 Safety Vest</span>
+      </div>
+      <div>
+        <div style="font-size:0.62rem;color:var(--red);font-weight:700;margin-bottom:0.3rem;">EPP AUSENTE</div>
+        <span class="pill pno">NO-Hardhat</span><span class="pill pno">NO-Mask</span><span class="pill pno">NO-Safety Vest</span>
+      </div>
+      <div>
+        <div style="font-size:0.62rem;color:var(--text-muted);font-weight:700;margin-bottom:0.3rem;">CONTEXTO</div>
+        <span class="pill pot">Person</span><span class="pill pot">Safety Cone</span><span class="pill pot">machinery</span><span class="pill pot">vehicle</span>
+      </div>
+      <div class="card" style="border-color:#fef08a;background:var(--yellow-bg);padding:0.8rem;">
+        <div style="font-size:0.7rem;"><strong style="color:var(--yellow);">Desafío clave:</strong> el EPP ocupa <strong>&lt;2% del área de imagen</strong> (Hardhat: mediana 0.19%). Objetos pequeños en escenas densas.</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:0.67rem;color:var(--text-muted);font-weight:700;margin-bottom:0.5rem;">DISTRIBUCIÓN DE CLASES</div>
+      <div class="img-grid">
+        <img src="data/class_distribution.png" alt="Distribución de clases">
+        <div class="img-caption">Distribución de instancias por clase y split (train/val/test)</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ SLIDE 5: EDA - BBOXES ══ -->
+<section>
+<div class="base slide-std">
+  <div class="shead"><span class="stag">Análisis Exploratorio</span><h2>Análisis de Bounding Boxes</h2></div>
+  <div class="g2" style="align-items:start;gap:1.2rem;">
+    <div>
+      <div style="font-size:0.67rem;color:var(--text-muted);font-weight:700;margin-bottom:0.5rem;">TAMAÑO DEL EPP POR CLASE</div>
+      <img src="data/bbox_size_per_class.png" alt="Tamaño bbox por clase" style="width:100%;border-radius:10px;border:1px solid var(--border);box-shadow:var(--shadow);">
+      <div class="img-caption">Los EPP son significativamente más pequeños que Person o machinery</div>
+    </div>
+    <div>
+      <div style="font-size:0.67rem;color:var(--text-muted);font-weight:700;margin-bottom:0.5rem;">CO-OCURRENCIA DE CLASES</div>
+      <img src="data/class_cooccurrence.png" alt="Co-ocurrencia" style="width:100%;border-radius:10px;border:1px solid var(--border);box-shadow:var(--shadow);">
+      <div class="img-caption">48% de imágenes tienen trabajadores con y sin casco simultáneamente</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ SLIDE 6: ARQUITECTURA ══ -->
+<section>
+<div class="base slide-std">
+  <div class="shead"><span class="stag">Sistema</span><h2>Arquitectura del Pipeline</h2></div>
+  <div class="pipeline">
+    <div class="pstep"><div class="icon">🎥</div><div class="pname">VIDEO</div><div class="psub">Frame a frame</div></div>
+    <div class="parr">→</div>
+    <div class="pstep hl-blue"><div class="icon">🔍</div><div class="pname">YOLO</div><div class="psub">Detección EPP<br>v8n / v8m / v11n</div></div>
+    <div class="parr">→</div>
+    <div class="pstep hl-cyan"><div class="icon">🔗</div><div class="pname">BYTETRACK</div><div class="psub">Track ID<br>persistente</div></div>
+    <div class="parr">→</div>
+    <div class="pstep hl-green"><div class="icon">📊</div><div class="pname">COMPLIANCE</div><div class="psub">3 estados por EPP<br>Ventana deslizante</div></div>
+    <div class="parr">→</div>
+    <div class="pstep hl-red"><div class="icon">🚨</div><div class="pname">ALERTAS</div><div class="psub">Tiempo real<br>por Track ID</div></div>
+  </div>
+  <div class="g2" style="gap:1rem;margin-top:0.3rem;">
+    <div class="card">
+      <div style="font-size:0.67rem;color:var(--primary);font-weight:700;margin-bottom:0.4rem;">¿POR QUÉ BYTETRACK?</div>
+      <div style="font-size:0.77rem;line-height:1.7;color:var(--text-2);">A diferencia de SORT, ByteTrack asocia detecciones de <strong>baja confianza</strong> ("bytes"), recuperando trabajadores parcialmente ocluidos. Crucial en obras con múltiples personas.</div>
+    </div>
+    <div class="card">
+      <div style="font-size:0.67rem;color:var(--cyan);font-weight:700;margin-bottom:0.4rem;">¿POR QUÉ YOLO Y NO FASTER R-CNN?</div>
+      <div style="font-size:0.77rem;line-height:1.7;color:var(--text-2);">Pipeline de <strong>una sola etapa</strong>: 97–120 FPS en CPU. Faster R-CNN opera a 5–10 FPS. Para monitoreo continuo de video, el throughput es crítico.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ SLIDE 7: MOTOR COMPLIANCE ══ -->
+<section>
+<div class="base slide-std">
+  <div class="shead"><span class="stag">Contribución Principal</span><h2>Motor de Compliance: Lógica de Tres Estados</h2></div>
+  <div class="g3" style="margin-bottom:1rem;">
+    <div class="sc sg"><div class="sb">✓ CUMPLE</div><div class="st">EPP detectado</div><div class="sd">El modelo detectó el EPP presente en este frame.</div></div>
+    <div class="sc sr"><div class="sb">✗ NO CUMPLE</div><div class="st">Violación confirmada</div><div class="sd">El modelo detectó clase NO-X (ausencia explícita).</div></div>
+    <div class="sc sgy"><div class="sb">? SIN DATO</div><div class="st">Indeterminado</div><div class="sd">Oclusión, distancia o ángulo: el detector no pudo decidir.</div></div>
+  </div>
+  <div class="g2" style="gap:1rem;">
+    <div class="card">
+      <div style="font-size:0.67rem;color:var(--primary);font-weight:700;margin-bottom:0.4rem;">EVALUACIÓN POR EPP INDEPENDIENTE</div>
+      <div style="font-size:0.77rem;line-height:1.7;color:var(--text-2);">Cada EPP (casco, chaleco, mascarilla) tiene su <strong>propio historial por Track ID</strong>. Un frame donde el casco está ocluido no penaliza la evaluación del chaleco.</div>
+    </div>
+    <div class="card" style="border-color:#86efac;background:var(--green-bg);">
+      <div style="font-size:0.67rem;color:var(--green);font-weight:700;margin-bottom:0.4rem;">💡 RESULTADO CLAVE</div>
+      <div style="font-size:0.77rem;line-height:1.7;">Video "EPP completo": compliance pasó de <strong style="color:var(--red);">61%</strong> (por frame) a <strong style="color:var(--green);">100%</strong> (por EPP). El sistema refleja correctamente la realidad.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ SLIDE 8: TRAINING CURVES ══ -->
+<section>
+<div class="base slide-std">
+  <div class="shead"><span class="stag">Entrenamiento</span><h2>Fine-tuning de los 3 Modelos YOLO</h2></div>
+  <div class="g2" style="align-items:start;gap:1.2rem;">
+    <div style="display:flex;flex-direction:column;gap:0.8rem;">
+      <div class="card">
+        <div style="font-size:0.67rem;color:var(--text-muted);font-weight:700;margin-bottom:0.5rem;">MODELOS ENTRENADOS</div>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;">
+          <div style="display:flex;align-items:center;gap:0.7rem;font-size:0.8rem;"><span class="chip chip-n">YOLOv8n</span> <span style="color:var(--text-muted);">3.2M params — optimizado para velocidad</span></div>
+          <div style="display:flex;align-items:center;gap:0.7rem;font-size:0.8rem;"><span class="chip chip-m">YOLOv8m</span> <span style="color:var(--text-muted);">25.9M params — balance precisión/velocidad</span></div>
+          <div style="display:flex;align-items:center;gap:0.7rem;font-size:0.8rem;"><span class="chip chip-11">YOLOv11n</span> <span style="color:var(--text-muted);">2.6M params — arquitectura más reciente</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:0.67rem;color:var(--text-muted);font-weight:700;margin-bottom:0.4rem;">CONFIGURACIÓN</div>
+        <div style="font-size:0.77rem;color:var(--text-2);line-height:1.65;">Transfer learning desde pesos COCO · Resolución 640×640px · Entrenamiento en Google Colab (GPU)</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:0.67rem;color:var(--text-muted);font-weight:700;margin-bottom:0.5rem;">CURVAS DE ENTRENAMIENTO</div>
+      <img src="data/training_curves.png" alt="Curvas de entrenamiento" style="width:100%;border-radius:10px;border:1px solid var(--border);box-shadow:var(--shadow);">
+      <div class="img-caption">Los tres modelos convergen correctamente sin overfitting evidente</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ SLIDE 9: COMPARACIÓN DE MODELOS ══ -->
+<section>
+<div class="base slide-std">
+  <div class="shead"><span class="stag">Resultados</span><h2>Comparación de Arquitecturas YOLO</h2></div>
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:0.9rem;">
+    <table class="mtable">
+      <thead>
+        <tr>
+          <th>Modelo</th><th>Params</th><th>mAP50 ↑</th><th>mAP50-95 ↑</th>
+          <th>Precision ↑</th><th>Recall ↑</th><th>Latencia ↓</th><th>FPS ↑</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="chip chip-n">YOLOv8n</span></td>
+          <td>3.2M</td><td>0.777</td><td>0.476</td><td>0.896</td><td>0.685</td>
+          <td class="bv">8.3ms</td><td class="bv">119.9</td>
+        </tr>
+        <tr class="best-row">
+          <td><span class="chip chip-m">YOLOv8m ★</span></td>
+          <td>25.9M</td>
+          <td class="bv">0.858</td><td class="bv">0.580</td><td class="bv">0.936</td><td class="bv">0.787</td>
+          <td>10.3ms</td><td>97.4</td>
+        </tr>
+        <tr>
+          <td><span class="chip chip-11">YOLOv11n</span></td>
+          <td>2.6M</td><td>0.769</td><td>0.461</td><td>0.888</td><td>0.698</td>
+          <td>10.3ms</td><td>97.2</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="g3" style="gap:0.8rem;">
+    <div class="card" style="border-color:#86efac;background:var(--green-bg);">
+      <div style="font-size:0.65rem;color:var(--green);font-weight:700;margin-bottom:0.3rem;">YOLOv8m — Mejor precisión</div>
+      <div style="font-size:0.72rem;color:var(--text-2);">Recomendado para máximo mAP con recursos disponibles.</div>
+    </div>
+    <div class="card" style="border-color:#bfdbfe;background:var(--bg-accent);">
+      <div style="font-size:0.65rem;color:var(--primary);font-weight:700;margin-bottom:0.3rem;">YOLOv8n — Mejor velocidad</div>
+      <div style="font-size:0.72rem;color:var(--text-2);">120 FPS en CPU. Ideal para dispositivos edge.</div>
+    </div>
+    <div class="card" style="border-color:#fef08a;background:var(--yellow-bg);">
+      <div style="font-size:0.65rem;color:var(--yellow);font-weight:700;margin-bottom:0.3rem;">YOLOv11n — Hallazgo</div>
+      <div style="font-size:0.72rem;color:var(--text-2);">Menos params que v8n pero no supera su mAP en este dominio.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ SLIDE 10: ANÁLISIS ══ -->
+<section>
+<div class="base slide-std">
+  <div class="shead"><span class="stag">Análisis</span><h2>Detección por Clase (YOLOv8m)</h2></div>
+  <div class="g2" style="align-items:start;gap:1.2rem;">
+    <div>
+      <div style="font-size:0.67rem;color:var(--text-muted);font-weight:700;margin-bottom:0.5rem;">MATRIZ DE CONFUSIÓN</div>
+      <img src="data/confusion_matrix_clean.png" alt="Matriz de confusión" style="width:100%;max-height:300px;object-fit:contain;border-radius:10px;border:1px solid var(--border);box-shadow:var(--shadow);background:white;">
+      <div class="img-caption">Pérdida de 11–19% en clases NO-X hacia background: detectar ausencia es más difícil</div>
+    </div>
+    <div>
+      <div style="font-size:0.67rem;color:var(--text-muted);font-weight:700;margin-bottom:0.5rem;">AP POR CLASE</div>
+      <img src="data/ap_per_class.png" alt="AP por clase" style="width:100%;max-height:220px;object-fit:contain;border-radius:10px;border:1px solid var(--border);box-shadow:var(--shadow);background:white;">
+      <div class="img-caption">Average Precision por clase — YOLOv8m</div>
+      <div class="card" style="margin-top:0.8rem;border-color:#fef08a;background:var(--yellow-bg);">
+        <div style="font-size:0.72rem;color:var(--text-2);line-height:1.6;">Las clases NO-X presentan el mayor desafío porque no representan objetos físicos sino <strong>ausencias</strong>. Por esto el estado SIN_DATO es esencial.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ SLIDE 11: DEMO ══ -->
+<section>
+<div class="base" style="background:linear-gradient(160deg,#0f172a 0%,#1e1b4b 100%);">
+  <div class="shead">
+    <span class="stag" style="color:#a5b4fc;background:rgba(165,180,252,0.1);border-color:rgba(165,180,252,0.3);">Demo en Video</span>
+    <h2 style="color:#fff;">Sistema en Acción — Obras Reales</h2>
+  </div>
+  <div class="demo-hero">
+    <img src="data/demo_preview.png" alt="Preview del sistema de tracking en acción">
+    <div class="demo-play">▶</div>
+  </div>
+  <div class="demo-meta">
+    <div class="demo-badge">Modelo: <span>YOLOv8m</span></div>
+    <div class="demo-badge">Tracker: <span>ByteTrack</span></div>
+    <div class="demo-badge">Duración: <span>2 min</span></div>
+    <div class="demo-badge">Escenas: <span>5 videos reales</span></div>
+    <div class="demo-badge">EPP supervisados: <span>Casco + Chaleco</span></div>
+  </div>
+  <div class="card" style="margin-top:0.7rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);">
+    <div style="font-size:0.75rem;color:#e2e8f0;line-height:1.6;">
+      🎬 <strong style="color:#a5b4fc;">Reproducir: </strong><code style="color:#93c5fd;font-family:'JetBrains Mono',monospace;font-size:0.72rem;">videos/demo_2min.mp4</code>
+      — Cada Track ID tiene color único · Bounding boxes rojos = sin EPP confirmado · Panel de compliance en tiempo real
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══ SLIDE 12: RESULTADOS DEL SISTEMA ══ -->
+<section>
+<div class="base slide-std">
+  <div class="shead"><span class="stag">Evaluación</span><h2>Resultados en 5 Videos de Obra Real</h2></div>
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:1rem;">
+    <div class="vrow" style="border-bottom:1px solid var(--border);background:var(--bg);">
+      <div style="font-size:0.62rem;color:var(--text-muted);font-weight:700;">ESCENA</div>
+      <div class="vv" style="font-size:0.62rem;color:var(--text-muted);font-weight:700;">FRAMES</div>
+      <div class="vv" style="font-size:0.62rem;color:var(--text-muted);font-weight:700;">TRACKS</div>
+      <div class="vv" style="font-size:0.62rem;color:var(--text-muted);font-weight:700;">ALERTAS</div>
+      <div class="vv" style="font-size:0.62rem;color:var(--text-muted);font-weight:700;">COMPLIANCE</div>
+    </div>
+    <div class="vrow"><div class="vn">🏗️ Vista general de obra</div><div class="vv">607</div><div class="vv">49</div><div class="vv" style="color:var(--red);">78</div><div><div class="cbar"><div class="cfill" style="width:63%;background:linear-gradient(90deg,#f59e0b,#d97706);"></div></div><div class="clabel" style="color:var(--yellow);">63.1%</div></div></div>
+    <div class="vrow"><div class="vn">🚜 Trabajadores con maquinaria</div><div class="vv">456</div><div class="vv">10</div><div class="vv" style="color:var(--red);">8</div><div><div class="cbar"><div class="cfill" style="width:42%;background:linear-gradient(90deg,#ef4444,#dc2626);"></div></div><div class="clabel" style="color:var(--red);">42.4%</div></div></div>
+    <div class="vrow"><div class="vn">🌤️ Construcción al aire libre</div><div class="vv">447</div><div class="vv">10</div><div class="vv" style="color:var(--red);">8</div><div><div class="cbar"><div class="cfill" style="width:54%;background:linear-gradient(90deg,#f59e0b,#d97706);"></div></div><div class="clabel" style="color:var(--yellow);">53.6%</div></div></div>
+    <div class="vrow"><div class="vn">🤝 Colaboración en obra</div><div class="vv">235</div><div class="vv">8</div><div class="vv" style="color:var(--yellow);">8</div><div><div class="cbar"><div class="cfill" style="width:74%;background:linear-gradient(90deg,#16a34a,#22c55e);"></div></div><div class="clabel" style="color:var(--green);">74.5%</div></div></div>
+    <div class="vrow"><div class="vn">✅ Trabajadores con EPP completo</div><div class="vv">201</div><div class="vv">5</div><div class="vv" style="color:var(--green);">3*</div><div><div class="cbar"><div class="cfill" style="width:100%;background:linear-gradient(90deg,#16a34a,#34d399);"></div></div><div class="clabel" style="color:var(--green);">100%</div></div></div>
+  </div>
+  <div class="card" style="border-color:#bbf7d0;background:var(--green-bg);">
+    <span style="font-size:0.72rem;color:var(--text-2);">* Las 3 alertas en "EPP completo" son de tracks efímeros al inicio del video, antes de que la ventana deslizante acumule datos. Con EPP confirmado, el estado se corrige automáticamente.</span>
+  </div>
+</div>
+</section>
+
+<!-- ══ SLIDE 13: CONCLUSIONES ══ -->
+<section>
+<div class="base slide-std">
+  <div class="shead"><span class="stag">Conclusiones</span><h2>5 Conclusiones Principales</h2></div>
+  <div style="display:flex;flex-direction:column;gap:0.25rem;">
+    <div class="citem"><div class="cnum">1</div><div class="ctxt"><strong>YOLOv8m</strong> obtuvo el mejor rendimiento global: <strong>mAP50 de 85.8%</strong> y recall de 78.7%, superando a YOLOv8n y YOLOv11n en todas las métricas.</div></div>
+    <div class="citem"><div class="cnum">2</div><div class="ctxt"><strong>YOLOv11n</strong> (2.6M params) no supera a YOLOv8n (3.2M) en mAP50 (0.769 vs 0.777): las optimizaciones arquitectónicas de v11 no compensan la reducción de capacidad en este dominio específico.</div></div>
+    <div class="citem"><div class="cnum">3</div><div class="ctxt">El EPP ocupa <strong>menos del 2% del área de imagen</strong> (casco: mediana 0.19%). Este es el principal desafío y explica la pérdida de 11–19% de detecciones NO-X hacia background.</div></div>
+    <div class="citem"><div class="cnum">4</div><div class="ctxt">La <strong>evaluación independiente por EPP con tres estados</strong> es esencial: el compliance del video EPP completo pasó de <strong style="color:var(--red);">61%</strong> (por frame) a <strong style="color:var(--green);">100%</strong> (por EPP individual).</div></div>
+    <div class="citem"><div class="cnum">5</div><div class="ctxt"><strong>ByteTrack</strong> habilita un sistema de alertas basado en incumplimiento <em>sostenido</em>, reduciendo falsas alarmas por oclusiones momentáneas gracias a las identidades persistentes por Track ID.</div></div>
+  </div>
+</div>
+</section>
+
+<!-- ══ SLIDE 14: FINAL ══ -->
+<section>
+<div class="base slide-final">
+  <div style="font-size:2.5rem;margin-bottom:1rem;">🙏</div>
+  <h2>¡Gracias!</h2>
+  <p>Preguntas y comentarios son bienvenidos.</p>
+  <div class="final-cards">
+    <div class="fcard"><div class="fv">85.8%</div><div class="fl">mAP50<br>YOLOv8m</div></div>
+    <div class="fcard"><div class="fv">97–120</div><div class="fl">FPS en CPU</div></div>
+    <div class="fcard"><div class="fv">5</div><div class="fl">Videos de obra<br>evaluados</div></div>
+    <div class="fcard"><div class="fv">100%</div><div class="fl">Compliance<br>EPP completo</div></div>
+  </div>
+  <p style="font-size:0.72rem;margin-top:2rem;color:#93c5fd;">
+    📦 github.com/spardo83/computer_vision_2_tp
+  </p>
+</div>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true, slideNumber: true, progress: true,
+    transition: 'slide', transitionSpeed: 'fast', backgroundTransition: 'fade',
+    controls: true, center: false, width: 1280, height: 720, margin: 0
+  });
+</script>
+</body>
+</html>

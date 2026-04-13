@@ -1,7 +1,7 @@
 # Sistema de Monitoreo Automático de EPP en Obras de Construcción
 
 **Trabajo Práctico – Visión por Computadora II**
-**Autor:** Sebastian Pardo (spardo83@gmail.com)
+**Autores:** Bohórquez, María Gabriela. Ferrari, Maira Daniela. Pardo, Sebastián
 
 ---
 
@@ -50,12 +50,14 @@ computer_vision_2_tp/
 │   ├── 03_model_comparison.ipynb      # Comparación de arquitecturas
 │   └── 04_tracking_demo.ipynb         # Demo con ByteTrack + alertas
 ├── src/ppe_monitor/                   # Módulo Python del proyecto
-├── data/                              # Dataset (no incluido en git)
-├── models/                            # Pesos entrenados (no incluidos en git)
-├── runs/                              # Outputs de entrenamiento YOLO
-├── videos/                            # Videos de entrada/salida
+├── data/                              # Dataset + resultados (parcialmente en git)
+├── models/                            # Pesos entrenados (generados por Notebook 02, excluidos de git)
+├── runs/                              # Logs de entrenamiento YOLO (excluidos de git)
+├── videos/                            # Videos de demo procesados
+├── paper/                             # Paper IEEE (.tex + .pdf compilado)
 ├── pyproject.toml                     # Dependencias (uv)
-└── .gitignore
+├── .env.example                       # Plantilla de variables de entorno
+└── REPRODUCIBILITY.md                 # Guía completa de reproducibilidad
 ```
 
 ## Instalación y Uso
@@ -101,7 +103,19 @@ Abrir VS Code en la carpeta del proyecto y ejecutar:
 ### API Key de Roboflow
 
 Registrarse en [roboflow.com](https://roboflow.com) (gratuito) y obtener la API key en Account → API Keys.
-En el Notebook 1, reemplazar `"TU_API_KEY_AQUI"` con la key obtenida.
+
+```bash
+cp .env.example .env
+# Editar .env y completar ROBOFLOW_API_KEY con tu clave
+```
+
+El Notebook 01 lee la clave automáticamente desde `.env` (nunca commitear este archivo).
+
+### Google Colab
+
+Los notebooks detectan el entorno Colab automáticamente y ajustan las rutas a Google Drive. Recomendado para el entrenamiento si no se cuenta con GPU local.
+
+> Para una guía completa de reproducibilidad ver [REPRODUCIBILITY.md](REPRODUCIBILITY.md).
 
 ## Resultados
 
@@ -109,11 +123,9 @@ En el Notebook 1, reemplazar `"TU_API_KEY_AQUI"` con la key obtenida.
 
 | Modelo | mAP50 | mAP50-95 | Precision | Recall | Latencia (CPU) |
 |--------|-------|----------|-----------|--------|----------------|
-| YOLOv8n | — | — | — | — | — |
-| YOLOv8m | — | — | — | — | — |
-| YOLOv11n | — | — | — | — | — |
-
-*Tabla a completar tras ejecutar el entrenamiento.*
+| YOLOv8n | 0.777 | 0.476 | 0.896 | 0.685 | 8.3ms (120 FPS) |
+| YOLOv8m | **0.858** | **0.580** | **0.936** | **0.787** | 10.3ms (97 FPS) |
+| YOLOv11n | 0.769 | 0.461 | 0.888 | 0.698 | 10.3ms (97 FPS) |
 
 ## Notebooks
 
@@ -129,12 +141,16 @@ Comparación cuantitativa de YOLOv8n vs YOLOv8m vs YOLOv11n con métricas mAP, P
 ### Notebook 4 – Tracking + Demo
 Integración de ByteTrack para tracking persistente. Motor de compliance con ventana deslizante. Generación de video anotado con alertas en tiempo real.
 
+## Paper
+
+El informe académico en formato IEEE está disponible en [`paper/monitoreo_epp_construccion.pdf`](paper/monitoreo_epp_construccion.pdf).
+
 ## Referencias
 
-- Redmon, J. et al. (2016). You Only Look Once: Unified, Real-Time Object Detection.
-- Zhang, Y. et al. (2022). ByteTrack: Multi-Object Tracking by Associating Every Detection Box. ECCV 2022.
-- Ultralytics YOLO Documentation: https://docs.ultralytics.com
-- Dataset: Automation in Construction, 2024. DOI: 10.1016/j.autcon.2024.105356
+- Redmon, J. et al. (2016). You Only Look Once: Unified, Real-Time Object Detection. IEEE CVPR.
+- Zhang, Y. et al. (2022). ByteTrack: Multi-Object Tracking by Associating Every Detection Box. ECCV.
+- Jocher, G. et al. (2023). Ultralytics YOLOv8. https://docs.ultralytics.com
+- Roboflow Universe Projects. Construction Site Safety Dataset. DOI: 10.1016/j.autcon.2024.105356
 
 ## Licencia
 
