@@ -1,0 +1,23 @@
+{
+  "YOLOv8n": {
+    "map50": 0.7773,
+    "map50_95": 0.4764,
+    "precision": 0.8964,
+    "recall": 0.6851,
+    "val_time_s": 5.7
+  },
+  "YOLOv8m": {
+    "map50": 0.8576,
+    "map50_95": 0.5796,
+    "precision": 0.9362,
+    "recall": 0.7868,
+    "val_time_s": 6.0
+  },
+  "YOLOv11n": {
+    "map50": 0.7685,
+    "map50_95": 0.4613,
+    "precision": 0.8883,
+    "recall": 0.698,
+    "val_time_s": 5.8
+  }
+}
