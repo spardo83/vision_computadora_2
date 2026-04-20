@@ -28,7 +28,6 @@ data/valid/
 data/test/
 
 # Modelos entrenados pesados
-models/*.pt
 notebooks/*.pt
 runs/
 
