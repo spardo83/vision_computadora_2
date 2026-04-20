@@ -10,9 +10,9 @@
 Sistema basado en deep learning para detectar automáticamente el uso de Equipamiento de Protección Personal (EPP) en obras de construcción, con seguimiento persistente de trabajadores mediante ByteTrack.
 
 El sistema detecta en tiempo real la presencia/ausencia de:
-- 🪖 Casco de seguridad (Hardhat)
-- 🦺 Chaleco reflectivo (Safety Vest)
-- 😷 Mascarilla (Mask)
+- Casco de seguridad (Hardhat)
+- Chaleco reflectivo (Safety Vest)
+- Mascarilla (Mask)
 
 ## Arquitectura
 
@@ -43,15 +43,16 @@ Referencia académica:
 ## Estructura del Proyecto
 
 ```
-computer_vision_2_tp/
+vision_computadora_2/
 ├── notebooks/
 │   ├── 01_setup_and_dataset.ipynb     # Setup + EDA del dataset
 │   ├── 02_model_training.ipynb        # Fine-tuning YOLOv8n / v8m / v11n
 │   ├── 03_model_comparison.ipynb      # Comparación de arquitecturas
 │   └── 04_tracking_demo.ipynb         # Demo con ByteTrack + alertas
+├── paper/                             # Paper académico (IEEE format)
 ├── src/ppe_monitor/                   # Módulo Python del proyecto
-├── data/                              # Dataset (no incluido en git)
-├── models/                            # Pesos entrenados (no incluidos en git)
+├── data/                              # Dataset y resultados de evaluación
+├── models/                            # Pesos entrenados
 ├── runs/                              # Outputs de entrenamiento YOLO
 ├── videos/                            # Videos de entrada/salida
 ├── pyproject.toml                     # Dependencias (uv)
@@ -68,8 +69,8 @@ computer_vision_2_tp/
 
 ```bash
 # Clonar repositorio
-git clone https://github.com/spardo83/computer_vision_2_tp.git
-cd computer_vision_2_tp
+git clone https://github.com/spardo83/vision_computadora_2.git
+cd vision_computadora_2
 
 # Crear entorno virtual e instalar dependencias con uv
 uv venv
@@ -101,13 +102,14 @@ Abrir VS Code en la carpeta del proyecto y ejecutar:
 ### API Key de Roboflow
 
 Registrarse en [roboflow.com](https://roboflow.com) (gratuito) y obtener la API key en Account → API Keys.
-En el Notebook 1, reemplazar `"TU_API_KEY_AQUI"` con la key obtenida.
+- **En Google Colab:** agregarla en Secrets (icono de llave en el panel izquierdo) con el nombre `ROBOFLOW_API_KEY`.
+- **En local:** crear un archivo `.env` en la raíz del proyecto con `ROBOFLOW_API_KEY=tu_key_aqui`.
 
 ## Resultados
 
 ### Comparación de Modelos
 
-| Modelo | mAP50 | mAP50-95 | Precision | Recall | Latencia (CPU) |
+| Modelo | mAP50 | mAP50-95 | Precision | Recall | Latencia (GPU) |
 |--------|-------|----------|-----------|--------|----------------|
 | YOLOv8n | 0.777 | 0.476 | 0.896 | 0.685 | 8.3ms (120 FPS) |
 | YOLOv8m | **0.858** | **0.580** | **0.936** | **0.787** | 10.3ms (97 FPS) |
@@ -119,7 +121,7 @@ En el Notebook 1, reemplazar `"TU_API_KEY_AQUI"` con la key obtenida.
 Análisis exploratorio del dataset Construction-PPE: distribución de clases, estadísticas de bounding boxes, visualización de muestras con anotaciones.
 
 ### Notebook 2 – Fine-tuning de Modelos
-Entrenamiento con transfer learning desde pesos COCO. Configuración adaptada para CPU (imgsz=416, batch=4, epochs=15).
+Entrenamiento con transfer learning desde pesos COCO. Configuración adaptada por dispositivo: GPU (imgsz=640, batch=16, epochs=50) o CPU (imgsz=416, batch=4, epochs=15). Los resultados reportados corresponden al entrenamiento en GPU (NVIDIA A100).
 
 ### Notebook 3 – Comparación de Arquitecturas
 Comparación cuantitativa de YOLOv8n vs YOLOv8m vs YOLOv11n con métricas mAP, Precision, Recall, latencia de inferencia y curvas de entrenamiento.
